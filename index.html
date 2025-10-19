@@ -23,13 +23,15 @@ body {
   text-align: center;
 }
 h2 { margin-top: 0; color: #0b8043; }
-button {
+button, a {
   padding: 12px 20px;
   font-size: 16px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   margin-top: 10px;
+  text-decoration: none;
+  display: inline-block;
 }
 .primary { background: #0b8043; color: white; }
 .secondary { background: #eee; color: #111; }
@@ -41,12 +43,15 @@ img.qr { width: 220px; height: 220px; border-radius: 8px; margin-top: 15px; }
 <div class="card">
   <h2>Donate to Vartika 💚</h2>
   <p>Click below to open your UPI app (GPay, PhonePe, Paytm, etc.)</p>
-  <button id="payBtn" class="primary">Open in UPI App</button><br>
+
+  <!-- Safe link that user has to click manually -->
+  <a href="upi://pay?pa=piyush193usa@okicici&pn=Piyush%20Sharma&tn=Donation&cu=INR" class="primary">Open in UPI App</a><br>
+
   <button id="copyBtn" class="secondary">Copy UPI ID</button>
 
   <div id="qrWrap">
     <p class="note">Or scan this QR code:</p>
-    <img id="qrImage" class="qr" 
+    <img class="qr" 
          src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=upi%3A%2F%2Fpay%3Fpa%3Dpiyush193usa%40okicici%26pn%3DPiyush%20Sharma%26tn%3DDonation%26cu%3DINR" 
          alt="UPI QR code"/>
   </div>
@@ -56,19 +61,6 @@ img.qr { width: 220px; height: 220px; border-radius: 8px; margin-top: 15px; }
 
 <script>
 const PA = "piyush193usa@okicici";
-const PN = "Piyush Sharma";
-const TN = "Donation";
-const CU = "INR";
-
-const params = new URLSearchParams({ pa: PA, pn: PN, tn: TN, cu: CU });
-const upiLink = `upi://pay?${params.toString()}`;
-
-// Open UPI app only when user clicks the button
-document.getElementById("payBtn").addEventListener("click", () => {
-  window.location.href = upiLink;
-});
-
-// Copy UPI ID
 document.getElementById("copyBtn").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(PA);
