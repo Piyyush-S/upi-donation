@@ -74,27 +74,29 @@
     document.getElementById("qrImage").src = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" + encodeURIComponent(upiLink);
 
     // --- Buttons ---
-    document.getElementById("payBtn").addEventListener("click", () => {
-      if (/Android/i.test(navigator.userAgent)) {
-        window.location.href = gpayIntent;
-        setTimeout(() => { window.location.href = upiLink; }, 1000);
-      } else {
-        window.location.href = upiLink;
-      }
-    });
-
-    document.getElementById("copyBtn").addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(PA);
-        document.getElementById("copyBtn").textContent = "Copied!";
-        setTimeout(() => document.getElementById("copyBtn").textContent = "Copy UPI ID", 1500);
-      } catch {
-        alert("Copy failed. Try manually.");
-      }
-    });
-
-    // --- Auto redirect after 1s ---
+document.getElementById("payBtn").addEventListener("click", () => {
+  if (/Android/i.test(navigator.userAgent)) {
+    window.location.href = gpayIntent;
     setTimeout(() => { window.location.href = upiLink; }, 1000);
+  } else {
+    window.location.href = upiLink;
+  }
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(PA);
+    document.getElementById("copyBtn").textContent = "Copied!";
+    setTimeout(() => document.getElementById("copyBtn").textContent = "Copy UPI ID", 1500);
+  } catch {
+    alert("Copy failed. Try manually.");
+  }
+});
+
+// --- Removed auto redirect ---
+// setTimeout(() => { window.location.href = upiLink; }, 1000);
+
   </script>
 </body>
 </html>
+
