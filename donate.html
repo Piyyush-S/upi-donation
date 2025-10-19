@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Birthday Donation for Vartika via UPI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: #f7f7f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      padding: 24px;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 { margin-top: 0; color: #0b8043; }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .primary { background: #0b8043; color: white; }
+    .secondary { background: #eee; color: #111; }
+    img.qr {
+      width: 220px; height: 220px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    .note { font-size: 13px; color: #666; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Donate to Vartika 💚</h2>
+    <p>Click below to open your UPI app (GPay, PhonePe, Paytm, etc.)</p>
+    <button id="payBtn" class="primary">Open in UPI App</button><br>
+    <button id="copyBtn" class="secondary">Copy UPI ID</button>
+
+    <div id="qrWrap">
+      <p class="note">Or scan this QR code:</p>
+      <img id="qrImage" class="qr" src="" alt="UPI QR code"/>
+    </div>
+
+    <p class="note">UPI ID: <b>piyush193usa@okicici</b></p>
+  </div>
+
+  <script>
+    // --- Payment details ---
+    const PA = "piyush193usa@okicici"; // Your UPI ID
+    const PN = "Piyush Sharma";         // Name
+    const TN = "Donation";              // Note (purpose)
+    const CU = "INR";                   // Currency
+    const AM = "";                      // Leave empty for user to enter amount
+
+    // --- Build UPI link ---
+    const params = new URLSearchParams({ pa: PA, pn: PN, tn: TN, cu: CU });
+    if (AM) params.set('am', AM);
+    const upiLink = `upi://pay?${params.toString()}`;
+    const gpayIntent = `intent://pay?${params.toString()}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
+
+    // --- QR code ---
+    document.getElementById("qrImage").src = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" + encodeURIComponent(upiLink);
+
+    // --- Buttons ---
+    document.getElementById("payBtn").addEventListener("click", () => {
+      if (/Android/i.test(navigator.userAgent)) {
+        window.location.href = gpayIntent;
+        setTimeout(() => { window.location.href = upiLink; }, 1000);
+      } else {
+        window.location.href = upiLink;
+      }
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(PA);
+        document.getElementById("copyBtn").textContent = "Copied!";
+        setTimeout(() => document.getElementById("copyBtn").textContent = "Copy UPI ID", 1500);
+      } catch {
+        alert("Copy failed. Try manually.");
+      }
+    });
+
+    // --- Auto redirect after 1s ---
+    setTimeout(() => { window.location.href = upiLink; }, 1000);
+  </script>
+</body>
+</html>
